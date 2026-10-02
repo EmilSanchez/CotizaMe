@@ -1,16 +1,14 @@
 /* =========================================================
-   CONFIGURACIÓN DE FIREBASE
+   CONFIGURACIÓN DE FIREBASE — proyecto: cotizame-7adab
    ---------------------------------------------------------
-   Pega aquí los datos de tu proyecto de Firebase
-   (Consola de Firebase > Configuración del proyecto > Tus apps > SDK).
-   Mientras apiKey esté vacío, el sistema funciona en MODO LOCAL
-   (guarda en este navegador) para que puedas probarlo.
+   Si apiKey queda vacío, el sistema funciona en MODO LOCAL
+   (guarda solo en este navegador).
    ========================================================= */
 window.FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyDkoIzMnFJm5JHwOCqeJN0-lmiA1WXUQe0",
+  authDomain: "cotizame-7adab.firebaseapp.com",
+  projectId: "cotizame-7adab",
+  storageBucket: "cotizame-7adab.firebasestorage.app",
+  messagingSenderId: "732536811349",
+  appId: "1:732536811349:web:cf787852546c250a2a49dc"
 };

@@ -44,11 +44,11 @@
 .pdf-client {
   background: #f3f6fa; border-radius: 9px;
   padding: 14px 18px; margin-bottom: 24px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 7px 28px;
+  display: grid; grid-template-columns: 1fr; gap: 6px;
 }
 .pdf-client .row { display: flex; gap: 12px; line-height: 1.45; min-width: 0; }
-.pdf-client .row.full { grid-column: span 2; }
-.pdf-client .lbl { width: 86px; flex-shrink: 0; font-size: 9.5px; font-weight: 700; color: #64748b; letter-spacing: .6px; text-transform: uppercase; padding-top: 1px; }
+
+.pdf-client .lbl { width: 110px; flex-shrink: 0; font-size: 9.5px; font-weight: 700; color: #64748b; letter-spacing: .6px; text-transform: uppercase; padding-top: 1px; }
 .pdf-client .val { font-size: 11px; color: #1e293b; word-break: break-word; }
 
 /* Tabla */

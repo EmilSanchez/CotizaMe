@@ -61,14 +61,15 @@
 .pdf-table td { border: 1px solid #cfd9e8; padding: 10px 8px; vertical-align: middle; font-size: 10.5px; }
 .pdf-table tr { page-break-inside: avoid; break-inside: avoid; }
 .pdf-table .p-qty { width: 46px; text-align: center; font-weight: 700; font-size: 13px; }
-.pdf-table .p-code { width: 72px; text-align: center; color: #475569; font-size: 10px; word-break: break-all; }
-.pdf-table .p-img { width: 122px; text-align: center; }
+.pdf-table .p-code { width: 1%; text-align: center; color: #475569; font-size: 10px; white-space: nowrap; padding-left: 10px; padding-right: 10px; }
+.pdf-table .p-img { width: 118px; text-align: center; }
 .pdf-table .p-img img { width: 104px; height: 88px; object-fit: contain; display: block; margin: 0 auto; }
 .pdf-table .p-img .noimg { width: 104px; height: 70px; margin: 0 auto; border-radius: 6px; background: #f3f6fa; color: #94a3b8; font-size: 9px; display: flex; align-items: center; justify-content: center; }
 .pdf-table .p-desc b { display: block; font-size: 11px; margin-bottom: 3px; color: #0f172a; }
 .pdf-table .p-desc span { color: #334155; line-height: 1.5; white-space: pre-line; }
-.pdf-table .p-unit { width: 96px; text-align: right; white-space: nowrap; }
-.pdf-table .p-total { width: 98px; text-align: right; font-weight: 700; white-space: nowrap; }
+.pdf-table .p-unit { width: 78px; text-align: center; white-space: nowrap; }
+.pdf-table .p-total { width: 84px; text-align: center; font-weight: 700; white-space: nowrap; }
+.pdf-table th.p-unit, .pdf-table th.p-total { line-height: 1.25; }
 
 /* Bloque inferior */
 .pdf-bottom { display: flex; gap: 30px; align-items: flex-start; page-break-inside: avoid; break-inside: avoid; }

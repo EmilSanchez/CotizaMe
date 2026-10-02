@@ -77,14 +77,14 @@ const PDF = (() => {
         </div>
 
         <div class="pdf-body">
-          <div class="pdf-h">Datos del cliente</div>
-          <div class="pdf-client">${clientRows}</div>
+          ${clientRows ? `<div class="pdf-h">Datos del cliente</div>
+          <div class="pdf-client">${clientRows}</div>` : ''}
 
           <div class="pdf-h">Detalle de la cotización</div>
           <table class="pdf-table">
             <thead>
               <tr>
-                <th>Cant.</th><th>Código</th><th>Producto</th><th>Descripción</th><th>Valor unitario</th><th>Total</th>
+                <th>Cant.</th><th class="p-code">Código</th><th>Producto</th><th>Descripción</th><th class="p-unit">Valor<br>unitario</th><th class="p-total">Valor<br>total</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -123,15 +123,33 @@ const PDF = (() => {
     }
     const html = build(q, cfg);
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
-    // Se entrega como texto: html2pdf crea su propio contenedor alineado en 0,0
-    await html2pdf().set({
+
+    // La barra de desplazamiento de Windows corre la imagen unos píxeles
+    // y deja un borde blanco; se oculta mientras se genera el PDF.
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = 'hidden';
+    try {
+      await html2pdf().set({
         margin: 0,
         filename: fileName(q),
         image: { type: 'jpeg', quality: 0.95 },
         html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0 },
         jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait', hotfixes: ['px_scaling'] },
         pagebreak: { mode: ['css'], avoid: ['tr', '.pdf-bottom', '.pdf-foot', '.pdf-client'] }
-      }).from(html, 'string').save();
+      }).from(html, 'string').toPdf().get('pdf').then(pdf => {
+        // En una sola hoja el pie queda pegado al borde inferior: se cubre
+        // la franja de redondeo para que no aparezca una línea blanca abajo.
+        if (pdf.internal.getNumberOfPages() === 1) {
+          const w = pdf.internal.pageSize.getWidth();
+          const h = pdf.internal.pageSize.getHeight();
+          pdf.setFillColor(29, 63, 115);
+          pdf.rect(0, h - 6, w, 6, 'F');
+        }
+      }).save();
+    } finally {
+      root.style.overflow = prevOverflow;
+    }
   }
 
   /** Muestra la vista previa en un modal */

@@ -3,7 +3,7 @@
    ========================================================= */
 
 .pdf-page {
-  width: 794px; min-height: 1120px;
+  width: 794px; height: 1123px; overflow: hidden;
   background: #fff; color: #1e293b;
   font-family: 'Poppins', Arial, sans-serif; font-size: 11px;
   display: flex; flex-direction: column;
@@ -22,7 +22,7 @@
   display: flex; align-items: center; justify-content: center; overflow: hidden;
   border: 3px solid rgba(255, 255, 255, .35);
 }
-.pdf-logo img { width: 72%; height: 72%; object-fit: contain; }
+.pdf-logo img { width: 90%; height: 90%; object-fit: contain; }
 .pdf-brand-name { font-size: 25px; font-weight: 700; line-height: 1.15; letter-spacing: .3px; }
 .pdf-brand-sub { font-size: 12.5px; opacity: .9; margin-top: 3px; }
 .pdf-brand-nit { font-size: 11.5px; opacity: .8; margin-top: 4px; }
@@ -36,7 +36,9 @@
 }
 .pdf-doc-date { font-size: 11.5px; opacity: .85; margin-top: 7px; }
 
-.pdf-body { padding: 26px 44px 20px; flex: 1; }
+.pdf-body { padding: 30px 44px 20px; flex: 1; min-height: 0; }
+.pdf-sec { display: flow-root; }
+.pdf-cont { font-weight: 500; font-size: 12px; color: #64748b; }
 
 .pdf-h { font-size: 14.5px; font-weight: 700; color: #1d3f73; margin: 0 0 11px; }
 
@@ -94,12 +96,18 @@
 /* Pie */
 .pdf-foot {
   background: #1d3f73; color: #fff;
-  padding: 20px 44px 22px; margin-top: 18px;
-  page-break-inside: avoid; break-inside: avoid;
+  padding: 18px 44px 20px; flex-shrink: 0;
 }
-.pdf-foot-name { font-size: 11.5px; font-weight: 700; margin-bottom: 8px; letter-spacing: .3px; }
+.pdf-foot-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.pdf-foot-page { font-size: 10px; opacity: .85; }
+.pdf-foot-name { font-size: 11.5px; font-weight: 700; letter-spacing: .3px; }
 .pdf-foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 30px; font-size: 10px; opacity: .92; }
 
 /* Vista previa en modal */
 .preview-wrap { background: #e9edf3; border-radius: 10px; padding: 20px; overflow: auto; max-height: calc(100vh - 220px); }
-.preview-scale { transform-origin: top left; box-shadow: 0 6px 24px rgba(15, 23, 42, .15); }
+.preview-box { margin: 0 auto 18px; overflow: hidden; box-shadow: 0 6px 24px rgba(15, 23, 42, .15); }
+.preview-box:last-child { margin-bottom: 0; }
+.preview-scale { transform-origin: top left; width: 794px; }
+
+/* Contenedor oculto donde se arman las hojas antes de capturarlas */
+.pdf-host { position: absolute; left: 0; top: 0; width: 794px; visibility: hidden; pointer-events: none; z-index: -1; }

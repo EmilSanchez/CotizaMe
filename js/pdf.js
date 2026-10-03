@@ -220,6 +220,58 @@ const PDF = (() => {
     return bodies.map((b, i) => pageHtml(q, cfg, b, i + 1, bodies.length));
   }
 
+  /* ---------------- Capa de texto ----------------
+     La hoja se inserta como imagen (para que se vea idéntica a la
+     vista previa). Encima se escribe el mismo texto de forma invisible,
+     en la misma posición, para poder seleccionarlo, copiarlo y buscarlo. */
+  function addTextLayer(pdf, pageEl) {
+    const origin = pageEl.getBoundingClientRect();
+    const walker = document.createTreeWalker(pageEl, NodeFilter.SHOW_TEXT);
+    const range = document.createRange();
+    pdf.setFont('helvetica', 'normal');
+
+    let node;
+    while ((node = walker.nextNode())) {
+      const text = node.nodeValue;
+      if (!text || !text.trim()) continue;
+      const style = getComputedStyle(node.parentElement);
+      const fontPx = parseFloat(style.fontSize) || 11;
+      const upper = style.textTransform === 'uppercase';
+
+      // Se mide palabra por palabra y se agrupan las que quedan en la misma línea
+      const lines = [];
+      const re = /\S+/g;
+      let m;
+      while ((m = re.exec(text))) {
+        range.setStart(node, m.index);
+        range.setEnd(node, m.index + m[0].length);
+        const r = range.getBoundingClientRect();
+        if (!r.width) continue;
+        const word = upper ? m[0].toUpperCase() : m[0];
+        const last = lines[lines.length - 1];
+        if (last && Math.abs(last.top - r.top) < fontPx * 0.5) {
+          last.words.push(word);
+          last.right = r.right;
+        } else {
+          lines.push({ words: [word], left: r.left, right: r.right, top: r.top, height: r.height });
+        }
+      }
+
+      lines.forEach(l => {
+        const str = l.words.join(' ');
+        pdf.setFontSize(fontPx * 0.75); // px -> pt
+        const target = l.right - l.left;
+        const natural = pdf.getTextWidth(str);
+        const charSpace = str.length > 1 ? Math.max(-2, Math.min(4, (target - natural) / (str.length - 1))) : 0;
+        pdf.text(str, l.left - origin.left, l.top - origin.top + (l.height - fontPx) / 2, {
+          baseline: 'top',
+          renderingMode: 'invisible',
+          charSpace
+        });
+      });
+    }
+  }
+
   /* ---------------- Descarga ---------------- */
   function fileName(q) {
     const cliente = String((q.cliente && q.cliente.nombre) || 'Cliente')
@@ -257,6 +309,7 @@ const PDF = (() => {
         });
         if (i > 0) pdf.addPage([PAGE_W, PAGE_H], 'portrait');
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, PAGE_W, PAGE_H);
+        addTextLayer(pdf, els[i]);
       }
       pdf.save(fileName(q));
     } finally {
